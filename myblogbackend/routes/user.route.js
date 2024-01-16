@@ -1,7 +1,7 @@
 import { Router } from "express";
 import fs from 'fs';
 import path from 'path';
-import { headingExistOrNot } from "../controllers/user.controller.js";
+import { headingExistOrNot, removeExtraCharacter, generateHeading } from "../controllers/user.controller.js";
 
 const userRouter = Router();
 
@@ -25,8 +25,27 @@ userRouter.post('/logout', async (req, res) => {
     res.send({"message":"userlogout"});
 })
 
-userRouter.get("/postBlog", async (req, res) => {
-    res.send({"message":"post blog page"});
+userRouter.get("/getBlogs", async (req, res) => {
+    const __dirname = path.resolve();
+    let dirpath = path.join(__dirname, 'approvedBlogs');
+    const response = [];
+    fs.readdir(dirpath, async (err, files) => {
+        if (err){
+            res.status(500).send({"message":"some internal server occured in getting blogs"});
+            return ;
+        }
+        for (let i=0;i<files.length;i++){
+            const file = files[i];
+            const content = await fs.promises.readFile(path.join(__dirname, 'approvedBlogs', file), 'utf-8');
+            const tempObj = {
+                "heading": generateHeading(file),
+                "content": content
+            }
+            response.push(tempObj);
+        }
+        res.status(200).send({"response":response});
+    })
+    
 })
 
 userRouter.post('/postBlog', async (req, res) => {
@@ -37,8 +56,8 @@ userRouter.post('/postBlog', async (req, res) => {
     heading = heading.replace(/\s/g, '_');  
     
     // removing extra characters from heading
-
-
+    heading = removeExtraCharacter(heading);
+    
     // getting th e filepath where to write the file
     const __dirname = path.resolve();
     let filepath = path.join(__dirname, 'nonApprovedBlogs', `${heading}.txt`);
