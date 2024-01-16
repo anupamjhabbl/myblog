@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 
-const headingExistOrNot =  (heading) => {
+const headingExistOrNot =  (heading, foldername) => {
     const __dirname = path.resolve();
-    const files = fs.readdirSync(path.join(__dirname, 'nonApprovedBlogs'));
+    const files = fs.readdirSync(path.join(__dirname, foldername));
     for (let i=0;i<files.length;i++){
         if (files[i]==`${heading}.txt`) {
             return true;
@@ -60,7 +60,6 @@ const appendFilenameToUser = async (user, filename) => {
         }
         userFile.userFile.push(newUser);
     }
-    console.log(JSON.stringify(userFile));
     await fs.promises.writeFile(path.join(__dirname, "userFiles.json"), JSON.stringify(userFile));
 }
 

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import fs from 'fs';
 import path from 'path';
-import { generateHeading } from "../controllers/user.controller.js";
+import { generateHeading, headingExistOrNot, removeExtraCharacter } from "../controllers/user.controller.js";
 
 const adminRouter = Router();
 
@@ -40,11 +40,53 @@ adminRouter.get("/adminBlogs", async (req, res) => {
 })
 
 adminRouter.post("/approveBlog", async (req, res) => {
+    let heading = req.body.heading;
+    let content = req.body.content;
+
+    // replacing spaces with undersocre
+    heading = heading.replace(/\s/g, '_');  
     
+    // removing extra characters from heading
+    heading = removeExtraCharacter(heading);
+    
+    // getting th e filepath where to write the file
+    const __dirname = path.resolve();
+    let filepath = path.join(__dirname, 'approvedBlogs', `${heading}.txt`);
+
+    // checking that heading already exist or not
+    const headingExists = headingExistOrNot(heading, "approvedBlogs");
+    if (headingExists){
+        res.status(400).send({"message":"Please change your heading, this heading already exists"});
+        return ;
+    }
+    
+    // writting to the file
+    try{
+        fs.promises.writeFile(filepath, content);
+        res.status(200).send({"message":"Thisblog is approved"})
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).send({"message":"There is some problem in approving this blog. Please try again"});
+    }
+    fs.unlinkSync(path.join(__dirname,"nonApprovedBlogs",`${heading}.txt`));
 })
 
 adminRouter.post("/rejectBlog", async (req, res) => {
+    let heading = req.body.heading;
+    let content = req.body.content;
 
+    // replacing spaces with undersocre
+    heading = heading.replace(/\s/g, '_');  
+    
+    // removing extra characters from heading
+    heading = removeExtraCharacter(heading);
+    
+    // getting th e filepath where to write the file
+    const __dirname = path.resolve();
+    let filepath = path.join(__dirname, 'nonApprovedBlogs', `${heading}.txt`);
+    fs.unlinkSync(filepath);
+    res.status(200).send({"message":"this blog is rejected"});
 })
 
 export default adminRouter;

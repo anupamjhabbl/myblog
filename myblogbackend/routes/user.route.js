@@ -76,7 +76,7 @@ userRouter.get('/getMyBlogs', async (req, res) => {
                 response.push(tempObj);
             }
             catch(err){
-                res.status(500).send({"message":"some internal server error occured in getting your files"});
+                console.log("this blog is rejected by admin")
             }
         }
         
@@ -101,7 +101,7 @@ userRouter.post('/postBlog', async (req, res) => {
     let filepath = path.join(__dirname, 'nonApprovedBlogs', `${heading}.txt`);
 
     // checking that heading already exist or not
-    const headingExists = headingExistOrNot(heading);
+    const headingExists = headingExistOrNot(heading, "nonApprovedBlogs");
     if (headingExists){
         res.status(400).send({"message":"Please change your heading, this heading already exists"});
         return ;
