@@ -1,7 +1,7 @@
 import { Router } from "express";
 import fs from 'fs';
 import path from 'path';
-import { headingExistOrNot, removeExtraCharacter, generateHeading } from "../controllers/user.controller.js";
+import { headingExistOrNot, removeExtraCharacter, generateHeading, appendFilenameToUser, getUserFileList} from "../controllers/user.controller.js";
 
 const userRouter = Router();
 
@@ -48,9 +48,47 @@ userRouter.get("/getBlogs", async (req, res) => {
     
 })
 
+userRouter.get('/getMyBlogs', async (req, res) => {
+    let username = req.body.username;
+    let files = await getUserFileList(username);
+    let __dirname = path.resolve();
+    console.log(files);
+    let response = [];
+    for (let i=0;i<files.length;i++){
+        const file = files[i]+".txt";
+        try{
+            const content = await fs.promises.readFile(path.join(__dirname, 'nonApprovedBlogs', file), 'utf-8');
+            const tempObj = {
+                "heading": generateHeading(file),
+                "content": content,
+                "status":"Not approved"
+            }
+            response.push(tempObj);
+        }
+        catch(err){
+            try{
+                const content = await fs.promises.readFile(path.join(__dirname, 'approvedBlogs', file), 'utf-8');
+                const tempObj = {
+                    "heading": generateHeading(file),
+                    "content": content,
+                    "status":"approved"
+                }
+                response.push(tempObj);
+            }
+            catch(err){
+                res.status(500).send({"message":"some internal server error occured in getting your files"});
+            }
+        }
+        
+    }
+    res.status(200).send({"response":response});
+
+})
+
 userRouter.post('/postBlog', async (req, res) => {
     let heading = req.body.heading;
     let content = req.body.content;
+    let username = req.body.username;
 
     // replacing spaces with undersocre
     heading = heading.replace(/\s/g, '_');  
@@ -65,13 +103,14 @@ userRouter.post('/postBlog', async (req, res) => {
     // checking that heading already exist or not
     const headingExists = headingExistOrNot(heading);
     if (headingExists){
-        res.status(200).send({"message":"Please change your heading, this heading already exists"});
+        res.status(400).send({"message":"Please change your heading, this heading already exists"});
         return ;
     }
     
     // writting to the file
     try{
         fs.promises.writeFile(filepath, content);
+        appendFilenameToUser(username, heading);
         res.status(200).send({"message":"Your blog is given to admin for review"})
     }
     catch(err){
