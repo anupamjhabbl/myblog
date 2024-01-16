@@ -43,6 +43,28 @@ function App() {
           
       </div>
 
+      <div className='addblog'>
+        <form>
+          <label for="Title">Title</label>
+          <input type='text' name='Title' placeholder='Enter the title for your blog'></input><br></br>
+
+          <label for="Description">Description</label>
+          <textarea name='Description' placeholder='Write description for your blog '></textarea><br></br>
+
+          <button type='submit'>Add blog </button>
+        </form>
+      </div>
+
+
+      <div className='showblog'>
+        <h3 className='username'>username</h3>
+
+        <p className='title'>Title</p>
+
+        <p className='description'> blog</p>
+
+      </div>
+
 
     </div>
     
