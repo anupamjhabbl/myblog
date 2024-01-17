@@ -11,8 +11,8 @@ adminRouter.post("/login", async (req, res) => {
     console.log(username, password);
 
     if (username=="admin" && password=="12345678"){
-        res.status(200).send({"message":"logged in as admin"});
         // reirect to adminBlogs page
+        res.redirect("http://127.0.0.1:3000/admin/adminPage");
     }
     else{
         res.status(200).send({"message":"not logged in. try again"})
@@ -82,7 +82,6 @@ adminRouter.post("/approveBlog", async (req, res) => {
 
 adminRouter.post("/rejectBlog", async (req, res) => {
     let heading = req.body.heading;
-    let content = req.body.content;
 
     // replacing spaces with undersocre
     heading = heading.replace(/\s/g, '_');  

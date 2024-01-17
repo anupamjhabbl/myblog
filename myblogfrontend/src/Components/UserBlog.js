@@ -25,12 +25,12 @@ const UserBlog = () => {
             <button><a href="http://127.0.0.1:3000/user/writeBlog">Write a Blog</a></button>
             <h2>Your Blogs</h2>
             {yourBlog.map((blogObj) => {
-                return <Blog heading={`${blogObj.heading}`} description={`${blogObj.content}`} status={`${blogObj.status}`}/>
+                return <Blog heading={`${blogObj.heading}`} description={`${blogObj.content}`} status={`${blogObj.status}`} showbutton="none"/>
             })}
 
             <h2>All Blogs</h2>
             {allBlog.map((blogObj) => {
-                return <Blog heading={`${blogObj.heading}`} description={`${blogObj.content}`} status=""/>
+                return <Blog heading={`${blogObj.heading}`} description={`${blogObj.content}`} status="" showbutton="none"/>
             })}
         </div>
     )

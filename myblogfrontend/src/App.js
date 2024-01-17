@@ -6,6 +6,7 @@ import Signup from './Components/Signup';
 import UserBlog from './Components/UserBlog';
 import BlogAdd from './Components/BlogAdd'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import AdminPage from './Components/AdminPage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route exact path="/user/register" element={<Signup/>}/>
             <Route exact path="/user/getBlogs" element={<UserBlog/>}/>
             <Route exact path="/user/writeBlog" element={<BlogAdd/>}/>
+            <Route exact path="/admin/adminPage" element={<AdminPage/>}/>
           </Routes>
       </Router>
     </div>
