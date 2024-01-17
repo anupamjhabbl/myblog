@@ -7,14 +7,26 @@ const adminRouter = Router();
 
 adminRouter.get('/login', async (req, res) => {
     res.send({"message":"admin login page"});
+    // reirect to admin login form page
 })
 
 adminRouter.post("/login", async (req, res) => {
-    res.send({"message":"adminlogin"});
+    const username = req.body.userame;
+    const password = req.body.password;
+
+    if (username=="admin" && password=="12345678"){
+        res.status(200).send({"message":"logged in as admin"});
+        // reirect to adminBlogs page
+    }
+    else{
+        res.status(200).send({"message":"not logged in. try again"})
+        // redirect to first page 
+    }
 })
 
 adminRouter.post("/logout", async (req, res) => {
     res.send({"message":"admin logged out"})
+    // redirect to first page
 })
 
 adminRouter.get("/adminBlogs", async (req, res) => {

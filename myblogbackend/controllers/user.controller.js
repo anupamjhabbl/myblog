@@ -1,5 +1,7 @@
 import fs from 'fs';
 import path from 'path';
+import bcrypt from "bcryptjs"
+import jwt from 'jsonwebtoken'
 
 const headingExistOrNot =  (heading, foldername) => {
     const __dirname = path.resolve();
@@ -76,4 +78,19 @@ const getUserFileList = async  (username) => {
     
 }
 
-export {headingExistOrNot, removeExtraCharacter, generateHeading, appendFilenameToUser, getUserFileList};
+const passwordHasher = async (password) => {
+    const newPassword = await bcrypt.hash(password, 10);
+    return newPassword;
+}
+
+const tokenGenerator = (user) => {
+    const token = jwt.sign(user, "Mercedes#@myaim1workingforyou");
+    return token;
+}
+
+const getUserFromToken = (token) => {
+    const user = jwt.verify(token, "Mercedes#@myaim1workingforyou");
+    return user.username;
+}
+
+export {headingExistOrNot, removeExtraCharacter, generateHeading, appendFilenameToUser, getUserFileList, passwordHasher, tokenGenerator, getUserFromToken};

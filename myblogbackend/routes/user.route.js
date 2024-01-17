@@ -1,7 +1,9 @@
 import { Router } from "express";
 import fs from 'fs';
 import path from 'path';
-import { headingExistOrNot, removeExtraCharacter, generateHeading, appendFilenameToUser, getUserFileList} from "../controllers/user.controller.js";
+import { headingExistOrNot, removeExtraCharacter, generateHeading, appendFilenameToUser, getUserFileList, passwordHasher, tokenGenerator, getUserFromToken} from "../controllers/user.controller.js";
+import User from "../models/user.model.js";
+import bcrypt from "bcryptjs";
 
 const userRouter = Router();
 
@@ -10,18 +12,71 @@ userRouter.get('/login', async (req, res) => {
 })
 
 userRouter.post('/login', async (req, res) => {
-    res.send({"message":"userlogin"});
+    const username = req.body.username;
+    const password = req.body.password;
+
+    try{
+        const user = await User.findOne({username:username});
+        if (user==null){
+            res.status(400).send({"message":"wrong credentials"});
+            return ;
+        }
+        const check = await bcrypt.compare(password, user.password);
+        if (check){
+            const obj = {
+                username : username
+            }
+            const token = tokenGenerator(obj);
+            res.cookie("jwt",token, {httpOnly:true});
+            res.status(200).send({"message":"user successfully logged in"});
+        }
+        else{
+            res.status(400).send({"message":"wrong credentials"});
+        }
+    }
+    catch(err){
+        res.status(500).send({"message":"not able to user login"});
+    }
 });
 
 userRouter.get("/register", async (req, res) => {
-    res.send({"message":"register page"});
+    
 });
 
 userRouter.post("/register", async (req, res) => {
-    res.send({"message":"userregister"});
+    const username = req.body.username;
+    const email = req.body.email;
+    let password = req.body.password;
+    password = await passwordHasher(password);
+
+    try{
+        const user = new User({
+            "username":username,
+            "email":email,
+            "password":password
+        });
+        await user.save();
+        const obj = {
+            username : username
+        }
+        const token = tokenGenerator(obj);
+        res.cookie("jwt",token, {httpOnly:true});
+        res.status(200).send({"message":"successfully registered the user","token":token});
+    }
+    catch(err) {
+        if (err.code==11000){
+            res.status(400).send({"message":"This username has already been used. Please try with some other usernmae"});
+        }
+        else{
+            res.status(500).send({"message":"some internal server error occured in saving the register info in db"});
+        }
+    }
 })
 
 userRouter.post('/logout', async (req, res) => {
+    const expirationDate = new Date();
+    expirationDate.setFullYear(expirationDate.getFullYear() - 1);
+    res.cookie("jwt", '', { expires: expirationDate, httpOnly: true });
     res.send({"message":"userlogout"});
 })
 
@@ -49,7 +104,8 @@ userRouter.get("/getBlogs", async (req, res) => {
 })
 
 userRouter.get('/getMyBlogs', async (req, res) => {
-    let username = req.body.username;
+    const token = req.cookies.jwt;
+    const username = getUserFromToken(token);
     let files = await getUserFileList(username);
     let __dirname = path.resolve();
     console.log(files);
@@ -88,7 +144,8 @@ userRouter.get('/getMyBlogs', async (req, res) => {
 userRouter.post('/postBlog', async (req, res) => {
     let heading = req.body.heading;
     let content = req.body.content;
-    let username = req.body.username;
+    const token = req.cookies.jwt;
+    const username = getUserFromToken(token);
 
     // replacing spaces with undersocre
     heading = heading.replace(/\s/g, '_');  
