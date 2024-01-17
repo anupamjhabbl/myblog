@@ -3,6 +3,8 @@ import './App.css';
 import Home from './Components/Home';
 import Login from './Components/Login';
 import Signup from './Components/Signup';
+import UserBlog from './Components/UserBlog';
+import BlogAdd from './Components/BlogAdd'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -14,6 +16,8 @@ function App() {
             <Route exact path="/user/login" element={<Login whom="users"/>}/>
             <Route exact path="/admin/login" element={<Login whom="admin"/>}/>
             <Route exact path="/user/register" element={<Signup/>}/>
+            <Route exact path="/user/getBlogs" element={<UserBlog/>}/>
+            <Route exact path="/user/writeBlog" element={<BlogAdd/>}/>
           </Routes>
       </Router>
     </div>

@@ -7,10 +7,6 @@ import bcrypt from "bcryptjs";
 
 const userRouter = Router();
 
-userRouter.get('/login', async (req, res) => {
-    res.send({"message":"login page"});
-})
-
 userRouter.post('/login', async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
@@ -27,8 +23,9 @@ userRouter.post('/login', async (req, res) => {
                 username : username
             }
             const token = tokenGenerator(obj);
-            res.cookie("jwt",token, {httpOnly:true});
-            res.status(200).send({"message":"user successfully logged in"});
+            res.cookie("jwt",token, {httpOnly:true, sameSite:'None', secure:true});
+            console.log("hdhdhd")
+            res.redirect("http://127.0.0.1:3000/user/getBlogs");
         }
         else{
             res.status(400).send({"message":"wrong credentials"});
@@ -37,10 +34,6 @@ userRouter.post('/login', async (req, res) => {
     catch(err){
         res.status(500).send({"message":"not able to user login"});
     }
-});
-
-userRouter.get("/register", async (req, res) => {
-    
 });
 
 userRouter.post("/register", async (req, res) => {
@@ -60,8 +53,8 @@ userRouter.post("/register", async (req, res) => {
             username : username
         }
         const token = tokenGenerator(obj);
-        res.cookie("jwt",token, {httpOnly:true});
-        res.status(200).send({"message":"successfully registered the user"});
+        res.cookie("jwt",token, {httpOnly:true, sameSite:'None', secure:true});
+        res.redirect("http://127.0.0.1:3000/");
     }
     catch(err) {
         if (err.code==11000){
@@ -77,7 +70,7 @@ userRouter.post('/logout', async (req, res) => {
     const expirationDate = new Date();
     expirationDate.setFullYear(expirationDate.getFullYear() - 1);
     res.cookie("jwt", '', { expires: expirationDate, httpOnly: true });
-    res.send({"message":"userlogout"});
+    res.redirect("http://127.0.0.1:3000/")
 })
 
 userRouter.get("/getBlogs", async (req, res) => {
@@ -110,7 +103,14 @@ userRouter.get('/getMyBlogs', async (req, res) => {
     let __dirname = path.resolve();
     console.log(files);
     let response = [];
-    for (let i=0;i<files.length;i++){
+    let filelength;
+    if (files==undefined){
+        filelength = 0;
+    }
+    else{
+        filelength = files.length;
+    }
+    for (let i=0;i<filelength;i++){
         const file = files[i]+".txt";
         try{
             const content = await fs.promises.readFile(path.join(__dirname, 'nonApprovedBlogs', file), 'utf-8');
@@ -167,8 +167,9 @@ userRouter.post('/postBlog', async (req, res) => {
     // writting to the file
     try{
         fs.promises.writeFile(filepath, content);
-        appendFilenameToUser(username, heading);
-        res.status(200).send({"message":"Your blog is given to admin for review"})
+        await appendFilenameToUser(username, heading);
+        // res.status(200).send({"message":"Your blog is given to admin for review"})
+        res.redirect('http://127.0.0.1:3000/user/getBlogs');
     }
     catch(err){
         console.log(err);

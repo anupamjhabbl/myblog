@@ -155,3 +155,134 @@ a{
 .register-container button:hover {
   background-color: #2980b9;
 }
+
+
+/* blogs */
+.showblog {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 40px;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.showblog:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Styles for the Blog Post Title */
+.title {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Styles for the Blog Post Description */
+.description {
+  color: #555;
+  line-height: 1.4;
+}
+
+/* Responsive Styles (optional) */
+@media (max-width: 768px) {
+  .showblog {
+    padding: 15px;
+  }
+
+  .title {
+    font-size: 1.3em;
+  }
+}
+
+.userblog{
+  margin-top:250px;
+}
+
+.userblog button {
+  background-color: #1e90ff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  position:absolute;
+  top:300px;
+  right:50px;
+  width:200px;
+  height:50px;
+}
+
+.userblog button:hover {
+  background-color: #1565c0;
+}
+
+/* Styles for the Link inside the Button */
+.userblog button a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Responsive Styles (optional) */
+@media (max-width: 768px) {
+  .userblog button {
+    padding: 8px 16px;
+  }
+}
+
+/* addBlog */
+/* Styles for the Blog Writing Form Container */
+.addblog {
+  width:1000px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f8f9fa; /* Light gray background */
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Styles for the Form */
+.addblog form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Styles for the Form Labels */
+.addblog label {
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #495057; /* Dark gray text color */
+}
+
+/* Styles for the Form Inputs */
+.addblog input,
+.addblog textarea {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ced4da; /* Light gray border */
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.addblog textarea{
+  height:300px;
+}
+
+/* Styles for the Submit Button */
+.addblog button {
+  background-color: #007bff; /* Blue button color */
+  color: #fff; /* White text color */
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.addblog button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
