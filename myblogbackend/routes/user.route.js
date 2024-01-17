@@ -61,7 +61,7 @@ userRouter.post("/register", async (req, res) => {
         }
         const token = tokenGenerator(obj);
         res.cookie("jwt",token, {httpOnly:true});
-        res.status(200).send({"message":"successfully registered the user","token":token});
+        res.status(200).send({"message":"successfully registered the user"});
     }
     catch(err) {
         if (err.code==11000){

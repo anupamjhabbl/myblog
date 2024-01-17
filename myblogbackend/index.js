@@ -8,6 +8,7 @@ const port = 8000;
 
 connectToDb();
 app.use(express.json());
+app.use(express.urlencoded()); 
 app.use('/admin', adminRouter);
 app.use('/users', userRouter);
 

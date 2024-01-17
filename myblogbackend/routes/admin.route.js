@@ -5,14 +5,10 @@ import { generateHeading, headingExistOrNot, removeExtraCharacter } from "../con
 
 const adminRouter = Router();
 
-adminRouter.get('/login', async (req, res) => {
-    res.send({"message":"admin login page"});
-    // reirect to admin login form page
-})
-
 adminRouter.post("/login", async (req, res) => {
-    const username = req.body.userame;
+    const username = req.body.username;
     const password = req.body.password;
+    console.log(username, password);
 
     if (username=="admin" && password=="12345678"){
         res.status(200).send({"message":"logged in as admin"});
