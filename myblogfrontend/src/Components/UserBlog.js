@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Blog from './Blog'
+import './../Blog.css'
 
 const UserBlog = () => {
     let [allBlog, setAllBlog] = useState([{"heading":"heading","content":"cindnd"}]);
@@ -23,12 +24,12 @@ const UserBlog = () => {
     return (
         <div className="userblog">
             <button><a href="http://127.0.0.1:3000/user/writeBlog">Write a Blog</a></button>
-            <h2>Your Blogs</h2>
+            <h1>Your Blogs</h1>
             {yourBlog.map((blogObj) => {
                 return <Blog heading={`${blogObj.heading}`} description={`${blogObj.content}`} status={`${blogObj.status}`} showbutton="none"/>
             })}
 
-            <h2>All Blogs</h2>
+            <h1>All Blogs</h1>
             {allBlog.map((blogObj) => {
                 return <Blog heading={`${blogObj.heading}`} description={`${blogObj.content}`} status="" showbutton="none"/>
             })}

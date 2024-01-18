@@ -1,0 +1,98 @@
+/* blogs */
+
+body{
+    background-image: none;
+}
+
+ /* .showblog {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 40px;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+} */
+
+.showblog{
+    width:60vw;
+    margin:auto;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.showblog_content{
+    margin:20px;
+}
+
+.showblog:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Styles for the Blog Post Title */
+.title {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Styles for the Blog Post Description */
+.description {
+  color: #555;
+  line-height: 1.4;
+}
+
+/* Responsive Styles (optional) */
+@media (max-width: 768px) {
+  .showblog {
+    padding: 15px;
+  }
+
+  .title {
+    font-size: 1.3em;
+  }
+}
+
+.userblog{
+  margin-top:750px;
+}
+
+.userblog button {
+  background-color: #1e90ff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  position:fixed;
+  top:60px;
+  right:50px;
+  width:200px;
+  height:50px;
+}
+
+.userblog button:hover {
+  background-color: #1565c0;
+}
+
+/* Styles for the Link inside the Button */
+.userblog button a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Responsive Styles (optional) */
+@media (max-width: 768px) {
+  .userblog button {
+    padding: 8px 16px;
+  }
+}
+
+.userblog h1{
+    text-align: center;
+    color:rgb(24, 109, 255)
+}
