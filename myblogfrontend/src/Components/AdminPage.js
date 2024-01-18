@@ -6,7 +6,7 @@ const AdminPage = () => {
 
     useEffect(() => {
         const getBlogsToApprove = async () => {
-            let data = await fetch("http://127.0.0.1:8000/admin/adminBlogs", {"method":"GET"});
+            let data = await fetch("http://127.0.0.1:8000/admin/adminBlogs", {"method":"GET", credentials:"include"});
             data = await data.json();
             setBlogs(data.response);
         }

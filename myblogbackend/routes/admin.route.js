@@ -12,6 +12,7 @@ adminRouter.post("/login", async (req, res) => {
 
     if (username=="admin" && password=="12345678"){
         // reirect to adminBlogs page
+        res.cookie("jwt","fuckyou", {httpOnly:true, sameSite:'None', secure:true});
         res.redirect("http://127.0.0.1:3000/admin/adminPage");
     }
     else{
@@ -27,6 +28,13 @@ adminRouter.post("/logout", async (req, res) => {
 
 adminRouter.get("/adminBlogs", async (req, res) => {
     const __dirname = path.resolve();
+    const token = req.cookies.jwt;
+    console.log(token);
+    if (token!="fuckyou"){
+        const response = [];
+        res.status(400).send({response:response});
+        return ;
+    }
     let dirpath = path.join(__dirname, 'nonApprovedBlogs');
     const response = [];
     fs.readdir(dirpath, async (err, files) => {
